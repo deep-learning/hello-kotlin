@@ -1,5 +1,7 @@
 package org.deeplearning
 
+// https://kotlinlang.org/docs/reference/basic-syntax.html
+
 // top level variabl
 val PI = 3.14
 var x = 0.0
@@ -108,4 +110,85 @@ object SimpleObj {
         }
         return null
     }
+
+    val items = listOf("apple", "orange", "kiwi")
+
+    fun forloop() {
+        for (item in items) {
+            println(item)
+        }
+
+        for (ix in items.indices) {
+            println("items[$ix] = ${items[ix]}")
+        }
+    }
+
+    fun whileloop() {
+        var ix = 0
+        while (ix < items.size) {
+            println("items[$ix] = ${items[ix]}")
+            ix++
+        }
+    }
+
+
+    // when expression
+    fun desc(obj: Any): String = when (obj) {
+        1          -> "one"
+        "hello"    -> "hello"
+        is Long    -> "Long"
+        !is String -> "Not a String"
+        else       -> "Unknown"
+    }
+
+    // range
+    fun range() {
+        if (10 in 1..9 + 1) {
+            println("fits in range")
+        }
+
+        if (-1 !in 0..items.lastIndex) {
+            println("out of range")
+        }
+
+        if (items.size !in items.indices) {
+            println("out of range")
+        }
+
+        for (x in 1..4) {
+            println(x)
+        }
+
+        // step
+        for (x in 1..10 step 2) {
+            println(x)
+        }
+
+        for (x in 9 downTo 0 step 3) {
+            println(x)
+        }
+    }
+
+    fun collections() {
+        for (item in items) {
+            println(item)
+        }
+
+        // operator in -> collection contains smth
+        when {
+            "orange" in items -> println("juicy")
+            "apple" in items  -> println("fine too")
+        }
+
+        // lambda
+        items.filter { it.startsWith("a") }
+                .sortedBy { it }
+                .map { it.toUpperCase() }
+                .forEach { println(it) }
+    }
+
+    class Rectangle()
+
+    // now `new`
+    val rect = Rectangle()
 }
