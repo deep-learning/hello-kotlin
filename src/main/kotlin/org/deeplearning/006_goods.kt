@@ -69,7 +69,8 @@ class E1 {
 
 // Extensions declared as members can be declared as open and overridden in subclasses. This means that the dispatch of such functions is virtual with regard to the dispatch receiver type, but static with regard to the extension receiver type.
 open class DD {}
-class D11: DD() {}
+
+class D11 : DD() {}
 
 open class CC {
     open fun DD.foo() {
@@ -112,10 +113,42 @@ fun MyClass.Companion.foo() {
 
 }
 
+
+// On the JVM, if the generated class needs to have a parameterless constructor, default values for all properties have to be specified
+data class User(val name: String = "default", val age: Int = -1)
+/*
+The compiler automatically derives the following members from all properties declared in the primary constructor:
+    equals()/hashCode() pair;
+    toString() of the form "User(name=John, age=42)";
+    componentN() functions corresponding to the properties in their order of declaration;
+    copy() function (see below).
+
+data classes have to fulfil the following requirements:
+    The primary constructor needs to have at least one parameter;
+    All primary constructor parameters need to be marked as val or var;
+    Data classes cannot be abstract, open, sealed or inner;
+    (before 1.1) Data classes may only implement interfaces.
+ */
+
+
+// Component functions generated for data classes enable their use in destructuring declarations:
+
 fun main(args: Array<String>) {
     l.swap(0, 2)
     println(l)
     println(D())    // "c
     println(null.toString())
     MyClass.foo()
+    println(User())
+    val jack = User(name = "Jack", age = 1)
+    val olderJack = jack.copy(age = 2)
+    val (name, age) = olderJack
+    println(olderJack)
+    println("$name, $age years of age")
 }
+
+/*
+Standard Data Classes
+
+The standard library provides Pair and Triple. In most cases, though, named data classes are a better design choice, because they make the code more readable by providing meaningful names for properties.
+ */
