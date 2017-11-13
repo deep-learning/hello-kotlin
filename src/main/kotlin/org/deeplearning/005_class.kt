@@ -21,6 +21,108 @@ class Person constructor(firstName: String) {
     arameters of the primary constructor can be used in the initializer blocks. They can also be used in property initializers declared in the class body
      */
     val personKey = firstName.toUpperCase()
+
+    // Classes in Kotlin can have properties. These can be declared as mutable, using the var keyword or read-only using the val keyword
+    var city: String = ""
+    var state: String? = null
+
+
+    /*
+    property syntax:
+    var <propertyName>[: <PropertyType>] [= <property_initializer>]
+        [<getter>]
+        [<setter>]
+     */
+    var allByDefault: Int? = 1
+    val initialized = 1 // type Int, default getter & setter
+
+    val inferredTyep = 1 // type Int, default getter only
+
+    private val size = 12
+
+    // custom getter
+    val isEmpty: Boolean
+        get() = this.size == 0
+
+    fun setDataFromString(value: String) {}
+
+    var stringRepresentation: String
+        get() = this.toString()
+        set(value) {
+            // By convention, the name of the setter parameter is value, but you can choose a different name if you prefer
+            // parse str & assigns values to other properties
+            setDataFromString(value)
+        }
+
+    // Since Kotlin 1.1, you can omit the property type if it can be inferred from the getter:
+    val isEmpty2 get() = this.size == 0
+
+    var setterVisibility: String = "abc"
+        private set // the setter is private and has the default implementation
+
+    //    var setterWithAnnotation: Any? = null
+    //        @Inject set // annotate the setter with Inject
+
+
+    /*
+    Classes in Kotlin cannot have fields. However, sometimes it is necessary to have a backing field when using custom accessors. For these purposes, Kotlin provides an automatic backing field which can be accessed using the field identifier
+    A backing field will be generated for a property if it uses the default implementation of at least one of the accessors, or if a custom accessor references it through the field identifier
+     */
+    var counter = 0 // the initializer value is written directly to the backing field
+        set(value) {
+            if (value >= 0) field = value
+        }
+
+    /*
+    If you want to do something that does not fit into this "implicit backing field" scheme, you can always fall back to having a backing property:
+
+    In all respects, this is just the same as in Java since access to private properties with default getters and setters is optimized so that no function call overhead is introduced.
+     */
+    private var _table: Map<String, Int>? = null
+    public val table: Map<String, Int>
+        get() {
+            if (_table == null) {
+                _table = HashMap()
+            }
+            return _table ?: throw AssertionError("Set to null by another thread")
+        }
+
+    /*
+    Compile-Time Constants
+    Properties the value of which is known at compile time can be marked as compile time constants using the const modifier. Such properties need to fulfil the following requirements:
+        1. Top-level or member of an object
+        2. Initialized with a value of type String or a primitive type
+        3. No custom getter
+     */
+
+    @Deprecated(Constants.SUBSYSTEM_DEPRECATED)
+    fun foo() {
+    }
+
+    fun bar() {
+        foo()
+    }
+
+    // Late-Initialized Properties
+    /*
+    Normally, properties declared as having a non-null type must be initialized in the constructor. However, fairly often this is not convenient. For example, properties can be initialized through dependency injection, or in the setup method of a unit test. In this case, you cannot supply a non-null initializer in the constructor, but you still want to avoid null checks when referencing the property inside the body of a class.
+    The modifier can only be used on var properties declared inside the body of a class (not in the primary constructor), and only when the property does not have a custom getter or setter. The type of the property must be non-null, and it must not be a primitive type.
+
+Accessing a lateinit property before it has been initialized throws a special exception that clearly identifies the property being accessed and the fact that it hasn't been initialized.
+     */
+
+    lateinit var subject: String
+    fun setup() {
+        subject = "xx"
+    }
+
+    fun test() {
+        println(subject.length)
+    }
+}
+
+object Constants {
+    const val SUBSYSTEM_DEPRECATED: String = "The subsystem is deprecated"
 }
 
 /*
