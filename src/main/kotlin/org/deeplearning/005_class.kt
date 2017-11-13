@@ -5,6 +5,28 @@ class Empty
 class Invoice {}
 
 /*
+Interfaces in Kotlin are very similar to Java 8. They can contain declarations of abstract methods, as well as method implementations. What makes them different from abstract classes is that interfaces cannot store state. They can have properties but these need to be abstract or to provide accessor implementations.
+
+ A property declared in an interface can either be abstract, or it can provide implementations for accessors. Properties declared in interfaces can't have backing fields, and therefore accessors declared in interfaces can't reference them
+ */
+interface MyInterface {
+    fun bar()
+
+    fun foo() {} // optional body
+
+    abstract var prop: Int // abstract
+
+    val propertyWithImpl: String
+        get() = "foo"
+}
+
+class MyChild(override var prop: Int) : MyInterface {
+    override fun bar() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+}
+
+/*
 A class in Kotlin can have a primary constructor and one or more secondary constructors. The primary constructor is part of the class header: it goes after the class name (and optional type parameters)
 If the primary constructor does not have any annotations or visibility modifiers, the constructor keyword can be omitted
  */
