@@ -1,4 +1,4 @@
-package org.deeplearning;
+package org.deeplearning.java;
 
 import org.deeplearning.one.Student;
 
